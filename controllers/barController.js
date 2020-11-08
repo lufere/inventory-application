@@ -1,7 +1,27 @@
 var Bar = require('../models/bar');
+var Brand = require('../models/brand');
+var Plate = require('../models/plate');
+var Rack = require('../models/rack');
+var async = require('async')
 
 exports.index = function(req,res){
-    res.send('NOT IMPLEMENTED: Home Page');
+    async.parallel({
+        bar_count: function(callback){
+            Bar.countDocuments({},callback);
+        },
+        brand_count: function(callback){
+            Brand.countDocuments({},callback);
+        },
+        plate_count: function(callback){
+            Plate.countDocuments({},callback);
+        },
+        rack_count: function(callback){
+            Rack.countDocuments({},callback);
+        },
+    },
+    function(err, results){
+        res.render('index',{title: 'Gym Equipment Home', data: results});
+    })
 }
 
 exports.bar_list = function(req, res){

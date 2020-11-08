@@ -1,7 +1,38 @@
 doctype html
-html
+html(lang = 'en')
   head
     title= title
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+    div(class = 'container-fluid')
+      div(class = 'row')
+        div(class = 'col-sm-2')
+          block sidebar
+            ul(class = 'sidebar-nav')
+              li
+                a(href = '/catalog') Home
+              li 
+                a(href='/catalog/bars') All bars
+              li 
+                a(href='/catalog/brands') All brands
+              li 
+                a(href='/catalog/plates') All plates
+              li 
+                a(href='/catalog/racks') All racks
+              li 
+                hr
+              li 
+                a(href='/catalog/bar/create') Create new bar
+              li 
+                a(href='/catalog/brand/create') Create new brand
+              li 
+                a(href='/catalog/plate/create') Create new plate
+              li 
+                a(href='/catalog/rack/create') Create new rack
+        div(class = 'col-sm-10')
+          block content

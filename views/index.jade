@@ -2,4 +2,12 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  if error
+    p Error getting information
+  else
+    p The following are available in inventory:
+    ul
+      li #[strong Bars:] !{data.bar_count} different bars
+      li #[strong Brands:] !{data.brand_count} different brands
+      li #[strong Plates:] !{data.plate_count} different plates
+      li #[strong Racks:] !{data.rack_count} different racks
