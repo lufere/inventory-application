@@ -24,8 +24,13 @@ exports.index = function(req,res){
     })
 }
 
-exports.bar_list = function(req, res){
-    res.send('NOT IMPLEMENTED: Bar list');
+exports.bar_list = function(req, res, next){
+    Bar.find({}, 'brand type price')
+        .populate('brand')
+        .exec(function(err, results){
+            if(err) return next(err);
+            res.render('bar_list',{title: 'Bar list', bar_list: results});
+        })
 }
 
 exports.bar_detail = function(req, res){
