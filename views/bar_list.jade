@@ -9,3 +9,5 @@ block content
             a(href = bar.url) #{bar.brand.name } 
             | #{bar.type.charAt(0).toUpperCase() + bar.type.slice(1)} bar 
             | #{bar.price} $
+    else
+        li No bars in inventory

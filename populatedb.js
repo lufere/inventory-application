@@ -48,7 +48,7 @@ function barCreate(weight, unit, type, olympic, price, brand, cb) {
 
 function brandCreate(name, description, cb) {
   var brand = new Brand({ name: name });
-  if(description =! false) brand.description = description;
+  if(description != false) brand.description = description;
        
   brand.save(function (err) {
     if (err) {
@@ -115,7 +115,7 @@ function rackCreate(price, gauge, profile, brand, type, capacity, safeties, cb) 
 function createBrands(cb) {
     async.parallel([
         function(callback) {
-          brandCreate("Rogue Fitness",'Rogue Fitness is the leading US-based manufacturer of strength and conditioning equipment and a major distributor of top brand fitness gear and accessories from around the country.', callback);
+          brandCreate("Rogue Fitness","Rogue Fitness is the leading US-based manufacturer of strength and conditioning equipment and a major distributor of top brand fitness gear and accessories from around the country.", callback);
         },
         function(callback) {
           brandCreate("Ivanko", false, callback);

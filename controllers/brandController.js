@@ -1,7 +1,11 @@
 var Brand = require('../models/brand');
 
-exports.brand_list = function(req, res){
-    res.send('NOT IMPLEMENTED: brand list');
+exports.brand_list = function(req, res, next){
+    Brand.find({}, 'name description')
+        .exec(function(err, results){
+            if(err) return next(err);
+            res.render('brand_list', {title: 'Brand list', brand_list: results})
+        });
 }
 
 exports.brand_detail = function(req, res){
