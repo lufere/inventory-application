@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h1= title
+
+    ul
+    each plate in plate_list
+        li
+            a(href = plate.url) #{plate.brand?plate.brand.name:"Unbranded"} 
+            | #{plate.weight} #{plate.units}
+            | #{plate.price} $
+    else
+        li No bars in inventory

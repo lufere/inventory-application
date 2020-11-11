@@ -1,7 +1,12 @@
 var Plate = require('../models/plate');
 
 exports.plate_list = function(req, res){
-    res.send('NOT IMPLEMENTED: plate list');
+    Plate.find({}, 'weight brand price units')
+    .populate('brand')
+    .exec(function(err, results){
+        if(err) return next(err);
+        res.render('plate_list',{title: 'Plate list', plate_list: results});
+    })
 }
 
 exports.plate_detail = function(req, res){
