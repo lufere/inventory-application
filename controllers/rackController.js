@@ -1,7 +1,12 @@
 var Rack = require('../models/rack');
 
 exports.rack_list = function(req, res){
-    res.send('NOT IMPLEMENTED: rack list');
+    Rack.find({}, 'type brand price')
+    .populate('brand')
+    .exec(function(err, results){
+        if(err) return next(err);
+        res.render('rack_list',{title: 'Rack list', rack_list: results});
+    })
 }
 
 exports.rack_detail = function(req, res){

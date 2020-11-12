@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h1= title
+
+    ul
+    each rack in rack_list
+        li
+            a(href = rack.url) #{rack.brand? rack.brand.name:"Unbranded"} 
+            | #{rack.type.charAt(0).toUpperCase() + rack.type.slice(1)} 
+            | #{rack.price} $
+    else
+        li No racks in inventory

@@ -6,7 +6,7 @@ block content
     ul
     each bar in bar_list
         li
-            a(href = bar.url) #{bar.brand.name } 
+            a(href = bar.url) #{bar.brand? bar.brand.name:"Unbranded"} 
             | #{bar.type.charAt(0).toUpperCase() + bar.type.slice(1)} bar 
             | #{bar.price} $
     else
