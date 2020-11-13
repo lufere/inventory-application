@@ -15,7 +15,7 @@ var RackSchema = new Schema({
 RackSchema
 .virtual('url')
 .get(function(){
-    return '/catalog/book/' + this._id;
+    return '/catalog/rack/' + this._id;
 });
 
 module.exports = mongoose.model('Rack', RackSchema);

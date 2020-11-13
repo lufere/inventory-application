@@ -1,0 +1,8 @@
+extends layout
+
+block content
+    h1= brand.name
+    
+    p #{brand.description? brand.description: 'No description'}
+
+    a(href = brand.website) Website

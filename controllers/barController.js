@@ -33,8 +33,13 @@ exports.bar_list = function(req, res, next){
         })
 }
 
-exports.bar_detail = function(req, res){
-    res.send('NOT IMPLEMENTED: Bar detail ' + req.params.id);
+exports.bar_detail = function(req, res, next){
+    Bar.findById(req.params.id)
+        .populate('brand')
+        .exec(function(err,results){
+            if(err) return next(err);
+            res.render('bar_detail', {title: 'Bar Detail', bar: results})
+        })
 }
 
 exports.bar_create_get = function(req, res){

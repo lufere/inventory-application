@@ -9,6 +9,7 @@ var BarSchema = new Schema({
     price: {type: Number, required: true, min: 0},
     unit: {type: String, required: true, enum:['kg', 'lb']},
     brand: {type: Schema.Types.ObjectId, ref: 'Brand'},
+    stock: {type: Number, required: true, min: 0},
 });
 
 BarSchema

@@ -29,8 +29,8 @@ var brands = []
 var plates = []
 var racks = []
 
-function barCreate(weight, unit, type, olympic, price, brand, cb) {
-  bardetail = {weight:weight , type: type, olympic:olympic, price:price, unit:unit, brand:brand}
+function barCreate(weight, unit, type, olympic, price, brand, stock, cb) {
+  bardetail = {weight:weight , type: type, olympic:olympic, price:price, unit:unit, brand:brand, stock:stock}
   if(brand != false) bardetail.brand = brand;
 
   var bar = new Bar(bardetail);
@@ -46,9 +46,10 @@ function barCreate(weight, unit, type, olympic, price, brand, cb) {
   }  );
 }
 
-function brandCreate(name, description, cb) {
+function brandCreate(name, description, website, cb) {
   var brand = new Brand({ name: name });
   if(description != false) brand.description = description;
+  if(website != false) brand.website = website;
        
   brand.save(function (err) {
     if (err) {
@@ -87,13 +88,14 @@ function plateCreate(weight, units, price, brand, handles, rubber_coated, olympi
 }
 
 
-function rackCreate(price, gauge, profile, brand, type, capacity, safeties, cb) {
+function rackCreate(price, gauge, profile, brand, type, capacity, safeties, stock, cb) {
   rackdetail = { 
     price: price,
     gauge: gauge,
     profile: profile,
     type: type,
     safeties: safeties,
+    stock: stock,
   }    
   if (brand != false) rackdetail.brand = brand;
   if (capacity != false) rackdetail.capacity = capacity;
@@ -115,19 +117,19 @@ function rackCreate(price, gauge, profile, brand, type, capacity, safeties, cb) 
 function createBrands(cb) {
     async.parallel([
         function(callback) {
-          brandCreate("Rogue Fitness","Rogue Fitness is the leading US-based manufacturer of strength and conditioning equipment and a major distributor of top brand fitness gear and accessories from around the country.", callback);
+          brandCreate("Rogue Fitness","Rogue Fitness is the leading US-based manufacturer of strength and conditioning equipment and a major distributor of top brand fitness gear and accessories from around the country.", 'https://www.roguefitness.com/', callback);
         },
         function(callback) {
-          brandCreate("Ivanko", false, callback);
+          brandCreate("Ivanko", 'Ivanko Barbell Company - In 1967, a young engineer passionate about bodybuilding and fitness realized that current manufacturers of free weights and strength equipment just “didn’t get it”. That man was Tom Lincir, founder of Ivanko Barbell. Since then he has made it his mission to introduce innovation to the fitness industry and perfect existing technologies. Today, Ivanko Barbell has a rich history of producing high quality and time tested products including urethane weight plates, dumbbells and barbells, pro-style dumbbells, Olympic bars and power bars, competition bumper plates, group aerobic exercise sets, cable attachments and more. ',  'https://ivankobarbell.com/', callback);
         },
         function(callback) {
-          brandCreate("Eleiko", false, callback);
+          brandCreate("Eleiko", false, 'https://www.eleiko.com/es/home', callback);
         },
         function(callback) {
-          brandCreate("Nautilus", false, callback);
+          brandCreate("Nautilus", false, 'https://www.nautilus.com/',callback);
         },
         function(callback) {
-          brandCreate("Titan", false, callback);
+          brandCreate("Titan", false, 'https://www.titan.fitness/', callback);
         },
         ],
         // optional callback
@@ -138,28 +140,28 @@ function createBrands(cb) {
 function createBars(cb) {
     async.parallel([
         function(callback) {
-          barCreate(45, 'lb', 'straight', true, 300, brands[0], callback);
+          barCreate(45, 'lb', 'straight', true, 300, brands[0], 10, callback);
         },
         function(callback) {
-          barCreate(45, 'lb', 'straight', true, 250, brands[1], callback);
+          barCreate(45, 'lb', 'straight', true, 250, brands[1], 5, callback);
         },
         function(callback) {
-          barCreate(25, 'lb', 'ez curl', true, 195, brands[0], callback);
+          barCreate(25, 'lb', 'ez curl', true, 195, brands[0], 2, callback);
         },
         function(callback) {
-          barCreate(45, 'lb', 'squat', true, 445, brands[0], callback);
+          barCreate(45, 'lb', 'squat', true, 445, brands[0], 1, callback);
         },
         function(callback) {
-          barCreate(45, 'lb', 'multi grip', true, 275, brands[0], callback);
+          barCreate(45, 'lb', 'multi grip', true, 275, brands[0], 0 ,callback);
         },
         function(callback) {
-          barCreate(35, 'lb', 'straight', true, 300, brands[3], callback);
+          barCreate(35, 'lb', 'straight', true, 300, brands[3], 0, callback);
         },
         function(callback) {
-          barCreate(45, 'lb', 'straight', true, 630, brands[2], callback);
+          barCreate(45, 'lb', 'straight', true, 630, brands[2], 2, callback);
         },
         function(callback) {
-          barCreate(45, 'lb', 'straight', true, 300, brands[4], callback);
+          barCreate(45, 'lb', 'straight', true, 300, brands[4], 5, callback);
         },
         ],
         // optional callback
@@ -201,16 +203,16 @@ function createPlates(cb) {
 function createRacks(cb) {
   async.parallel([
       function(callback) {
-        rackCreate(915, 11, '3x3', brands[0], 'power rack', false, 'pins', callback)
+        rackCreate(915, 11, '3x3', brands[0], 'power rack', false, 'pins', 5, callback)
       },
       function(callback) {
-        rackCreate(510, 11, '3x3', brands[0], 'wall mounted', false, 'none', callback)
+        rackCreate(510, 11, '3x3', brands[0], 'wall mounted', false, 'none', 10, callback)
       },
       function(callback) {
-        rackCreate(1300, 11, '3x3', brands[0], 'power rack', false, 'straps', callback)
+        rackCreate(1300, 11, '3x3', brands[0], 'power rack', false, 'straps', 2, callback)
       },
       function(callback) {
-        rackCreate(500, 11, '2x3', brands[4], 'power rack', false, 'pins', callback)
+        rackCreate(500, 11, '2x3', brands[4], 'power rack', false, 'pins', 10, callback)
       },
       ],
       // Optional callback

@@ -8,8 +8,12 @@ exports.brand_list = function(req, res, next){
         });
 }
 
-exports.brand_detail = function(req, res){
-    res.send('NOT IMPLEMENTED: brand detail ' + req.params.id);
+exports.brand_detail = function(req, res, next){
+    Brand.findById(req.params.id)
+        .exec(function(err,results){
+            if(err) next(err);
+            res.render('brand_detail', {title: 'Brand detail', brand: results});
+        })
 }
 
 exports.brand_create_get = function(req, res){

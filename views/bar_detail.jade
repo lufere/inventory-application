@@ -1,0 +1,14 @@
+extends layout
+
+block content
+    h1 #{bar.brand.name} #{bar.type} Bar
+
+    p #[strong Price:] #{bar.price} $
+    p #[strong Weight:] #{bar.weight} #{bar.unit}
+    p #[strong Olympic diameter:] #{bar.olympic? 'Yes': 'No'}
+    if bar.stock==1
+        p.text-warning #[strong Stock:] #{bar.stock}
+    else if bar.stock>0
+        p.text-success #[strong Stock:] #{bar.stock}
+    else
+        p.text-danger #[strong Stock:] #{bar.stock}
