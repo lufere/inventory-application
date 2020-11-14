@@ -9,8 +9,13 @@ exports.rack_list = function(req, res){
     })
 }
 
-exports.rack_detail = function(req, res){
-    res.send('NOT IMPLEMENTED: rack detail ' + req.params.id);
+exports.rack_detail = function(req, res, next){
+    Rack.findById(req.params.id)
+        .populate('brand')
+        .exec(function(err, results){
+            if(err) return next(err);
+            res.render('rack_detail', {title: 'Rack detail', rack: results});
+        });
 }
 
 exports.rack_create_get = function(req, res){

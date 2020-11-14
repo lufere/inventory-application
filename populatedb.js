@@ -203,16 +203,16 @@ function createPlates(cb) {
 function createRacks(cb) {
   async.parallel([
       function(callback) {
-        rackCreate(915, 11, '3x3', brands[0], 'power rack', false, 'pins', 5, callback)
+        rackCreate(915, 11, '3x3', brands[0], 'Power Rack', false, 'Pins', 5, callback)
       },
       function(callback) {
-        rackCreate(510, 11, '3x3', brands[0], 'wall mounted', false, 'none', 10, callback)
+        rackCreate(510, 11, '3x3', brands[0], 'Wall Mounted Rack', false, 'None', 10, callback)
       },
       function(callback) {
-        rackCreate(1300, 11, '3x3', brands[0], 'power rack', false, 'straps', 2, callback)
+        rackCreate(1300, 11, '3x3', brands[0], 'Power Rack', false, 'Straps', 2, callback)
       },
       function(callback) {
-        rackCreate(500, 11, '2x3', brands[4], 'power rack', false, 'pins', 10, callback)
+        rackCreate(500, 11, '2x3', brands[4], 'Power Rack', false, 'Pins', 10, callback)
       },
       ],
       // Optional callback

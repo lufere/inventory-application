@@ -7,9 +7,10 @@ var RackSchema = new Schema({
     gauge: {type: Number, required: true},
     profile: {type: String, required: true, enum:['2x2','2x3','3x3']},
     brand: {type: Schema.Types.ObjectId, ref: 'Brand'},
-    type: {type: String, required: true, enum: ['power rack', 'half rack', 'wall mounted']},
+    type: {type: String, required: true, enum: ['Power Rack', 'Half Rack', 'Wall Mounted Rack']},
     capacity: {type: Number, min: 0},
-    safeties: {type: String, required: true, enum:['pins', 'straps', 'arms', 'none']},
+    safeties: {type: String, required: true, enum:['Pins', 'Straps', 'Arms', 'None']},
+    stock: {type: Number, required: true, min:0},
 });
 
 RackSchema

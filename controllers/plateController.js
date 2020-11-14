@@ -9,8 +9,13 @@ exports.plate_list = function(req, res){
     })
 }
 
-exports.plate_detail = function(req, res){
-    res.send('NOT IMPLEMENTED: plate detail ' + req.params.id);
+exports.plate_detail = function(req, res, next){
+    Plate.findById(req.params.id)
+        .populate('brand')
+        .exec(function(err, results){
+            if(err) return next(err);
+            res.render('plate_detail', {title: 'Plate detail', plate: results});
+        })
 }
 
 exports.plate_create_get = function(req, res){

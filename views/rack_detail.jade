@@ -1,0 +1,22 @@
+extends layout
+
+block content
+    h1 #{rack.brand.name} #{rack.type}
+
+    p #[strong Type:] #{rack.type}
+    p #[strong Price: ] #{rack.price} $
+    if rack.stock==1
+        p.text-warning #[strong Stock:] #{rack.stock}
+    else if rack.stock>0
+        p.text-success #[strong Stock:] #{rack.stock}
+    else
+        p.text-danger #[strong Stock:] #{rack.stock}
+    p #[strong Gauge:] #{rack.gauge} Gauge Steel
+    p #[strong Profile:] #{rack.profile}
+    if rack.capacity
+        p #[strong Capacity: ] #{rack.capacity}
+    else
+        p 
+    p #[strong Safeties: ] #{rack.safeties}
+    
+
