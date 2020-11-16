@@ -2,7 +2,8 @@ var Bar = require('../models/bar');
 var Brand = require('../models/brand');
 var Plate = require('../models/plate');
 var Rack = require('../models/rack');
-var async = require('async')
+var async = require('async');
+const {body, validationResult} = require('express-validator');
 
 exports.index = function(req,res){
     async.parallel({
@@ -42,13 +43,57 @@ exports.bar_detail = function(req, res, next){
         })
 }
 
-exports.bar_create_get = function(req, res){
-    res.send('NOT IMPLEMENTED: Bar create GET');
+exports.bar_create_get = function(req, res, next){
+    Brand.find().exec(function(err, brands){
+        if(err) next(err);
+        console.log(brands[0]._id);
+        res.render('bar_form', {title:'Create Bar', brands: brands});
+    });
 }
 
-exports.bar_create_post = function(req, res){
-    res.send('NOT IMPLEMENTED: Bar create POST');
-}
+// exports.bar_create_post = function(req, res, next){
+// }
+
+exports.bar_create_post = [
+    function(req, res, next) {
+        req.body.olympic? req.body.olympic=true: req.body.olympic=false;
+        next();
+    },
+    body('type', 'Bar type required').trim().isLength({min:1}).escape(),
+    body('olympic').trim().escape(),
+    body('brand').optional({checkFalsy:true}).escape(),
+    body('price', 'Bar price required').trim().isFloat({min:0}).escape(),
+    body('stock', 'Stock required').trim().isFloat({min:0}).escape(),
+    body('weight', 'Bar weight required').trim().isFloat({min:0}).escape(),
+    body('unit', 'Weight units required').trim().escape(),
+
+    (req,res,next) =>{
+        const errors = validationResult(req);
+
+        var bar = new Bar({
+            type:req.body.type,
+            olympic:req.body.olympic,
+            brand:req.body.brand,
+            price:req.body.price,
+            stock:req.body.stock,
+            weight:req.body.weight,
+            unit:req.body.unit,
+        })
+
+        if(!errors.isEmpty()){
+            Brand.find().exec(function(err, brands){
+                if(err) return next(err);
+                res.render('bar_form', {title:'Create Bar', errors:errors.array(), bar:bar, brands:brands})
+            })
+        }else{
+            bar.save(function(err){
+                if(err) return next(err);
+                res.redirect(bar.url);
+            })
+        }
+    }
+]
+
 
 exports.bar_delete_get = function(req, res){
     res.send('NOT IMPLEMENTED: Bar delete GET');

@@ -1,0 +1,73 @@
+extends layout
+
+block content
+    h1= title
+
+    form(method='POST' action='')
+        div.form-group
+            div.form-inline
+                label(for='type') Bar type:
+                select#type.form-control(type='select' name='type')
+                    if bar
+                        option(value='straight' selected=(bar.type=='straight'? selected:false)) Straight Bar
+                        option(value='ez curl' selected=(bar.type=='ez curl'? selected:false)) EZ Curl Bar
+                        option(value='squat' selected=(bar.type=='squat'? selected:false)) Squat Bar
+                        option(value='multi grip' selected=(bar.type=='multi grip'? selected:false)) Multi Grip Bar
+                        option(value='trap' selected=(bar.type=='trap'? selected:false)) Trap Bar
+                    else
+                        option(value='straight') Straight Bar
+                        option(value='ez curl') EZ Curl Bar
+                        option(value='squat') Squat Bar
+                        option(value='multi grip') Multi Grip Bar
+                        option(value='trap') Trap Bar
+                div(class='checkbox-inline')
+                    if bar
+                        label.checkbox(for='olympic') Olympic diameter:
+                            input#olympic.checkbox-input(type='checkbox' name='olympic' checked=bar.olympic?true:false )
+                    else
+                        label.checkbox(for='olympic') Olympic diameter:
+                            input#olympic.checkbox-input(type='checkbox' name='olympic' checked=true)
+            
+            label(for='brand') Brand:
+            select#brand.form-control(type='select' name='brand')
+                option(value='') No brand
+                for brand in brands
+                    if bar
+                        option(value=brand._id selected=(bar.brand==brand._id? selected:false)) #{brand.name}
+                    else
+                        option(value=brand._id) #{brand.name}
+            label(for='price') Price:
+            input#price.form-control(type='number' placeholder='$$$' name='price' value=(bar? bar.price:''))
+
+            label(for='stock') Stock:
+            input#stock.form-control(type='number' name='stock' value=(bar? bar.stock:''))
+            div.form-inline(style='margin-top:10px')
+                label(for='weight') Weight:
+                input#weight.form-control(type='number' placeholder='45' name='weight' value=(bar? bar.weight:''))
+                div(class='checkbox-inline')
+                    if bar
+                        label.checkbox-inline(for='lb') lb
+                            input#lb(type='radio' name='unit' value='lb' checked=bar.unit=='lb'?true:false)
+                        label.checkbox-inline(for='kg') kg
+                            input#kg(type='radio' name='unit' value='kg' checked=bar.unit=='kg'?true:false)
+                    else
+                        label.checkbox-inline(for='lb') lb
+                            input#lb(type='radio' name='unit' value='lb' checked=true)
+                        label.checkbox-inline(for='kg') kg
+                            input#kg(type='radio' name='unit' value='kg')
+            //- if bar
+                //- for brand in brands
+            //- p=brands[0]._id
+            //- label(for='unit') Weight unit:
+            //- select#unit.form-control(type='select' name='unit')
+            //-     option(value='lb') lb
+            //-     option(value='kg') kg
+            
+
+
+        button.btn.btn-primary(type='submit') Submit
+    
+    if errors
+        ul
+            for error in errors
+                li!=error.msg

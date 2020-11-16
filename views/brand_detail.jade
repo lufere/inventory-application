@@ -5,4 +5,5 @@ block content
     
     p #{brand.description? brand.description: 'No description'}
 
-    a(href = brand.website) Website
+    if brand.website
+        a(href = brand.website) Website
