@@ -33,7 +33,7 @@ block content
                 option(value='') No brand
                 for brand in brands
                     if bar
-                        option(value=brand._id selected=(bar.brand==brand._id? selected:false)) #{brand.name}
+                        option(value=brand._id selected=(bar.brand==brand._id.toString()? true:false)) #{brand.name}
                     else
                         option(value=brand._id) #{brand.name}
             label(for='price') Price:

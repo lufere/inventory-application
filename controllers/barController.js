@@ -56,6 +56,7 @@ exports.bar_create_get = function(req, res, next){
 
 exports.bar_create_post = [
     function(req, res, next) {
+        if(req.body.brand=='') req.body.brand=null;
         req.body.olympic? req.body.olympic=true: req.body.olympic=false;
         next();
     },

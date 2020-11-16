@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    h1 #{bar.brand.name} #{bar.type} Bar
+    h1 #{bar.brand? bar.brand.name:'Unbranded'} #{bar.type} Bar
 
     p #[strong Price:] #{bar.price} $
     if bar.stock==1

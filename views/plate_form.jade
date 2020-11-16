@@ -1,0 +1,71 @@
+extends layout
+
+block content
+    h1= title
+
+    form(method='POST' action='')
+        div.form-group
+            div.form-inline
+                label(for='weight') Weight
+                input#weight.form-control(type='number' name='weight' placeholder='45lbs' value=plate?plate.weight:'')
+                div.checkbox-inline
+                    label.checkbox-inline(for='lb') lb
+                        input#lb(type='radio' name='units' value='lb' checked=true)
+                    label.checkbox-inline(for='kg') kg
+                        input#kg(type='radio' name='units' value='kg' checked=plate && plate.units=='kg'?true:false)
+
+            label(for='brand') Brand
+            select#brand.form-control(type='select' name='brand')
+                option(value='') No brand
+                for brand in brands
+                    if plate
+                        option(value=brand._id selected=(plate.brand==brand._id.toString()?true:false)) #{brand.name}
+                    else
+                        option(value=brand._id) #{brand.name}
+            
+            label(for='price') Price
+            input#price.form-control(type='number' name='price' placeholder='100$' value=plate?plate.price:'')
+
+            label(for='stock') Stock
+            input#stock.form-control(type='number' name='stock' placeholder='10' value=plate?plate.stock:'')
+
+            label Hole Diameter
+            div
+                label.checkbox-inline(for='olympic') Olympic
+                    input#olympic(type='radio' name='olympic' value='true' checked=true)
+                label.checkbox-inline(for='standard') Standard
+                    if plate
+                        input#standard(type='radio' name='olympic' value='false' checked=plate.olympic?false:true)
+                    else
+                        input#standard(type='radio' name='olympic' value='false' checked=false)
+
+            label(style='padding-top:10px; padding-right:5px;' for='bumper') Bumper plate  
+            input#bumper.checkbox-input(type='checkbox' value='true'  name='bumper' checked=plate?plate.bumper:false)
+            br
+
+            label(style='padding-top:10px;padding-right:5px;' for='rubber_coated') Rubber coated  
+            input#rubber_coated.checkbox-input(type='checkbox' value='true' name='rubber_coated' checked=plate?plate.rubber_coated:false)
+            br
+
+            label(style='padding-top:10px;padding-right:5px;' for='handles') Handles  
+            input#handles.checkbox-input(type='checkbox' value='true' name='handles' checked=plate?plate.handles:false)
+
+        button.btn.btn-primary(type='submit') Submit
+
+    if plate
+        p=plate.units
+
+    if errors
+        ul
+            for error in errors
+                li!=error.msg
+
+            
+            
+
+
+
+
+
+
+

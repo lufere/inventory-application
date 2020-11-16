@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    h1 #{plate.weight} #{plate.units} #{plate.brand? plate.brand.name: ''} Plate
+    h1 #{plate.weight} #{plate.units} #{plate.brand? plate.brand.name: 'Unbranded'} Plate
 
     p #[strong Weight:] #{plate.weight} #{plate.units}
     p #[strong Price:] #{plate.price}
@@ -11,7 +11,7 @@ block content
         p.text-success #[strong Stock:] #{plate.stock}
     else
         p.text-danger #[strong Stock:] #{plate.stock}
-    p #[strong Hole Diameter:] #{plate.olympic?'2 in': '1 in'}
+    p #[strong Hole Diameter:] #{plate.olympic?'Olympic': 'Standard'}
     p #[strong Bumper plate: ] #{plate.bumper? 'Yes': 'No'}
     p #[strong Rubber coated: ] #{plate.rubber_coated? 'Yes': 'No'}
     p #[strong Handles: ] #{plate.handles? 'Yes': 'No'}
