@@ -1,0 +1,51 @@
+extends layout
+
+block content
+    h1=title
+
+    form(method='POST' action='')
+        div.form-group
+            label(for='type') Rack type
+            select#type.form-control(type='select' name='type')
+                option(value='Power Rack' selected=rack&&rack.type=='Power Rack'?true:false) Power Rack
+                option(value='Half Rack' selected=rack&&rack.type=='Half Rack'?true:false) Half Rack
+                option(value='Wall Mounted Rack' selected=rack&&rack.type=='Wall Mounted Rack'?true:false) Wall Mounted Rack
+
+            label(for='brand')
+            select#brand.form-control(type='select' name='brand')
+                option(value='') No brand
+                for brand in brands
+                    option(value=brand._id selected=rack&&rack.brand==brand._id.toString()?true:false) #{brand.name}
+
+            label(for='price') Price
+            input#price.form-control(type='number' name='price' placeholder='300$' value=rack?rack.price:'')
+
+            label(for='stock') Stock
+            input#stock.form-control(type='number' name='stock' placeholder='1' value=rack?rack.stock:'')
+
+            div.form-inline
+                label(for='gauge') Gauge
+                input#gauge.form-control(type='number' name='gauge' placeholder='11' value=rack?rack.gauge:'')
+
+                label(for='profile' style='margin:20px 0 20px 20px;') Profile
+                select#profile.form-control(type='select' name='profile')
+                    option(value='2x2' selected=rack&&rack.profile=='2x2'?true:false) 2x2
+                    option(value='2x3' selected=rack&&rack.profile=='2x3'?true:false) 2x3
+                    option(value='3x3' selected=rack&&rack.profile=='3x3'?true:false) 3x3
+
+            label(for='capacity') Rack capacity
+            input#capacity.form-control(type='number' name='capacity' placeholder='1000 lbs' value=rack?rack.capacity:'')
+
+            label(for='safeties') Safeties
+            select#safeties.form-control(type='select' name='safeties')
+                option(value='Pins' selected=rack&&rack.safeties=='Pins'?true:false) Pins
+                option(value='Straps' selected=rack&&rack.safeties=='Straps'?true:false) Straps
+                option(value='Arms' selected=rack&&rack.safeties=='Arms'?true:false) Arms
+                option(value='None' selected=rack&&rack.safeties=='None'?true:false) None
+
+        button.btn.btn-primary(type='submit') Submit
+
+    if errors
+        ul
+            for error in errors
+                li!=error.msg

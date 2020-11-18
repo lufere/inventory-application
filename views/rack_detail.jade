@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    h1 #{rack.brand.name} #{rack.type}
+    h1 #{rack.brand?rack.brand.name:'Unbranded'} #{rack.type}
 
     p #[strong Type:] #{rack.type}
     p #[strong Price: ] #{rack.price} $
