@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h1= title
+
+    p Do you really want to delete this bar?
+    h2 #{bar.brand? bar.brand.name:'Unbranded'} #{bar.type} Bar
+
+    form(method='POST' action='')
+        input#barid(type='hidden' name='barid' value=bar._id)
+        button.btn.btn-primary(type='submit') Delete
+    
+

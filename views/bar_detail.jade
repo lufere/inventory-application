@@ -12,3 +12,9 @@ block content
         p.text-danger #[strong Stock:] #{bar.stock}
     p #[strong Weight:] #{bar.weight} #{bar.unit}
     p #[strong Olympic diameter:] #{bar.olympic? 'Yes': 'No'}
+
+    hr
+    p
+        a(href=bar.url+'/delete') Delete Bar
+    p
+        a(href=bar.url+'/update') Update Bar

@@ -96,12 +96,20 @@ exports.bar_create_post = [
 ]
 
 
-exports.bar_delete_get = function(req, res){
-    res.send('NOT IMPLEMENTED: Bar delete GET');
+exports.bar_delete_get = function(req, res, next){
+    Bar.findById(req.params.id).populate('brand').exec(function(err,bar){
+        if(err) return next(err);
+        if(bar == null) res.redirect('/catalog/brands')
+        res.render('bar_delete',{title:'Delete Bar', bar:bar})
+    })
 }
 
-exports.bar_delete_post = function(req, res){
-    res.send('NOT IMPLEMENTED: Bar delete POST');
+exports.bar_delete_post = function(req, res, next){
+    Bar.findByIdAndDelete(req.body.barid).exec(function(err,bar){
+        if(err) return next(err);
+        console.log(req.body.barid);
+        res.redirect('/catalog/bars');
+    });
 }
 
 exports.bar_update_get = function(req, res){
