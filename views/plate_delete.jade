@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    h1= title
+
+    p Do you really want to delete this plate?
+    h2 #{plate.weight} #{plate.units} #{plate.brand? plate.brand.name: 'Unbranded'} Plate
+
+    form(method='POST' action='')
+        input#plateid(type='hidden' name='plateid' value=plate._id)
+        button.btn.btn-primary(type='submit') Delete

@@ -73,12 +73,19 @@ exports.rack_create_post = [
     }
 ]
 
-exports.rack_delete_get = function(req, res){
-    res.send('NOT IMPLEMENTED: rack delete GET');
+exports.rack_delete_get = function(req, res, next){
+    Rack.findById(req.params.id).populate('brand').exec(function(err,rack){
+        if(err) return next(err);
+        if(rack==null)res.redirect('catalog/racks');
+        res.render('rack_delete',{title:'Delete Rack', rack:rack});
+    });
 }
 
-exports.rack_delete_post = function(req, res){
-    res.send('NOT IMPLEMENTED: rack delete POST');
+exports.rack_delete_post = function(req, res, next){
+    Rack.findByIdAndDelete(req.body.rackid).exec(function(err, rack){
+        if(err) return next(err)
+        res.redirect('/catalog/racks')
+    });
 }
 
 exports.rack_update_get = function(req, res){

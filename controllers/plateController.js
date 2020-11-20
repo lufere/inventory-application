@@ -78,12 +78,19 @@ exports.plate_create_post = [
     
 ]
 
-exports.plate_delete_get = function(req, res){
-    res.send('NOT IMPLEMENTED: plate delete GET');
+exports.plate_delete_get = function(req, res, next){
+    Plate.findById(req.params.id).populate('brand').exec(function(err, plate){
+        if(err) return next(err);
+        if(plate==null) res.redirect('/catalog/plates');
+        res.render('plate_delete',{title:'Delete Plate', plate:plate});
+    })
 }
 
-exports.plate_delete_post = function(req, res){
-    res.send('NOT IMPLEMENTED: plate delete POST');
+exports.plate_delete_post = function(req, res, next){
+    Plate.findByIdAndDelete(req.body.plateid).exec(function(err,plate){
+        if(err) return next(err);
+        res.redirect('/catalog/plates')
+    })
 }
 
 exports.plate_update_get = function(req, res){

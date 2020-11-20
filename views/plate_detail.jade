@@ -15,4 +15,10 @@ block content
     p #[strong Bumper plate: ] #{plate.bumper? 'Yes': 'No'}
     p #[strong Rubber coated: ] #{plate.rubber_coated? 'Yes': 'No'}
     p #[strong Handles: ] #{plate.handles? 'Yes': 'No'}
+
+    hr
+    p
+        a(href=plate.url+'/delete') Delete Plate
+    p
+        a(href=plate.url+'/update') Update Plate
     

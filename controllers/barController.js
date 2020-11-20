@@ -107,7 +107,6 @@ exports.bar_delete_get = function(req, res, next){
 exports.bar_delete_post = function(req, res, next){
     Bar.findByIdAndDelete(req.body.barid).exec(function(err,bar){
         if(err) return next(err);
-        console.log(req.body.barid);
         res.redirect('/catalog/bars');
     });
 }
