@@ -1,0 +1,41 @@
+extends layout
+
+block content
+    h1= title
+
+    if bars.length
+        p #[strong Delete the folllowing bars before brand deletion]
+        
+        div(style='margin-left>20px;margin-top:20px')
+            dl
+            each bar in bars
+                dt
+                    a(href=bar.url) #{bar.brand? bar.brand.name:'Unbranded'} #{bar.type} Bar
+
+    else if plates.length
+        hr
+        p #[strong Delete the folllowing plates before brand deletion]
+        
+        div(style='margin-left>20px;margin-top:20px')
+            dl
+            each plate in plates
+                dt
+                    a(href=plate.url) #{plate.weight} #{plate.units} #{plate.brand? plate.brand.name: 'Unbranded'} Plate
+
+    else if racks.length
+        hr
+        p #[strong Delete the folllowing racks before brand deletion]
+        
+        div(style='margin-left>20px;margin-top:20px')
+            dl
+            each rack in racks
+                dt
+                    a(href=rack.url) #{rack.brand?rack.brand.name:'Unbranded'} #{rack.type}
+    
+    else
+        p Do you really want to delete this brand?
+        h4= brand.name
+
+        form(method='POST' action='')
+            input#brandid(type='hidden' name='brandid' value=brand._id)
+            button.btn.btn-primary(type='submit') Delete

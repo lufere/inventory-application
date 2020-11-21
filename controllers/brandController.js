@@ -1,4 +1,9 @@
 var Brand = require('../models/brand');
+var Bar = require('../models/bar');
+var Plate = require('../models/plate');
+var Rack = require('../models/rack');
+
+const async = require('async');
 const {body, validationResult} = require('express-validator');
 
 exports.brand_list = function(req, res, next){
@@ -56,12 +61,52 @@ exports.brand_create_post = [
     }
 ]
 
-exports.brand_delete_get = function(req, res){
-    res.send('NOT IMPLEMENTED: brand delete GET');
+exports.brand_delete_get = function(req, res, next){
+    async.parallel({
+        brand: function(callback){
+            Brand.findById(req.params.id).exec(callback)
+        },
+        bars: function(callback){
+            Bar.find({'brand': req.params.id}).populate('brand').exec(callback)
+        },
+        plates: function(callback){
+            Plate.find({'brand': req.params.id}).populate('brand').exec(callback)
+        },
+        racks: function(callback){
+            Rack.find({'brand': req.params.id}).populate('brand').exec(callback)
+        },
+    },
+    function(err, results){
+        if(err) return next(err);
+        if(results.brand == null) res.redirect('/catalog/brands');
+        res.render('brand_delete', {title:'Delete Brand', brand:results.brand, bars:results.bars, plates:results.plates, racks:results.racks});
+    })
 }
 
-exports.brand_delete_post = function(req, res){
-    res.send('NOT IMPLEMENTED: brand delete POST');
+exports.brand_delete_post = function(req, res, next){
+    async.parallel({
+        brand: function(callback){
+            Brand.findById(req.params.id).exec(callback)
+        },
+        bars: function(callback){
+            Bar.find({'brand': req.params.id}).populate('brand').exec(callback)
+        },
+        plates: function(callback){
+            Plate.find({'brand': req.params.id}).populate('brand').exec(callback)
+        },
+        racks: function(callback){
+            Rack.find({'brand': req.params.id}).populate('brand').exec(callback)
+        },
+    },
+    function(err, results){
+        if(err) return next(err);
+        if(results.bars > 0 || results.plates > 0 || results.racks > 0) res.render('brand_delete', {title:'Delete Brand', brand:results.brand, bars:results.bars, plates:results.plates, racks:results.racks});
+        Brand.findByIdAndDelete(req.body.brandid).exec(function(err){
+            if(err) return next(err);
+            res.redirect('/catalog/brands');
+        });
+    })
+
 }
 
 exports.brand_update_get = function(req, res){
