@@ -10,7 +10,7 @@ block content
             label(for='description') Description:
             textarea#description.form-control(placeholder='Description' name='description') #{brand? brand.description:''}
             label(for='website') Brand Website:
-            input#website.form-control(type='text' placeholder='Website' name='website' value=(brand? brand.website:''))
+            input#website.form-control(type='text' placeholder='Website' name='website' value!=(brand? brand.website:''))
 
         button.btn.btn-primary(type='submit') Submit
 

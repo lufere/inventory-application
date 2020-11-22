@@ -6,8 +6,7 @@ block content
     p #{brand.description? brand.description: 'No description'}
 
     if brand.website
-        a(href = brand.website) Website
-
+        a(href!= brand.website) Website
     hr
     p
         a(href=brand.url+'/delete') Delete Brand
