@@ -5,6 +5,7 @@ var Rack = require('../models/rack');
 
 const async = require('async');
 const {body, validationResult} = require('express-validator');
+const { findByIdAndUpdate } = require('../models/bar');
 
 exports.brand_list = function(req, res, next){
     Brand.find({}, 'name description')
@@ -109,10 +110,32 @@ exports.brand_delete_post = function(req, res, next){
 
 }
 
-exports.brand_update_get = function(req, res){
-    res.send('NOT IMPLEMENTED: brand update GET');
+exports.brand_update_get = function(req, res, next){
+    Brand.findById(req.params.id).exec(function(err,brand){
+        if(err) return next(err);
+        if(brand === null) res.redirect('/catalog/brands');
+        res.render('brand_form', {title:'Update Brand', brand:brand});
+    })
 }
 
-exports.brand_update_post = function(req, res){
-    res.send('NOT IMPLEMENTED: brand update POST');
-}
+exports.brand_update_post = [
+    body('name', 'Brand name required').trim().isLength({min:1}).escape(),
+    body('description').trim().optional({checkFalsy:true}).escape(),
+    body('website', 'Invalid website').isURL().trim().optional({checkFalsy:true}).escape(),
+
+    (req,res,next) => {
+        const errors = validationResult(req);
+
+        var brand = new Brand({
+            name: req.body.name,
+            description: req.body.description,
+            website: req.body.website,
+            _id: req.params.id,
+        });
+
+        if(!errors.isEmpty()) res.render('brand_form', {title:'Update Brand', errors: errors.array(), brand:brand});
+        Brand.findByIdAndUpdate(req.params.id, brand, {}, function(err, brand){
+            res.redirect(brand.url);
+        })
+    }
+]
