@@ -33,7 +33,8 @@ block content
                 option(value='') No brand
                 for brand in brands
                     if bar
-                        option(value=brand._id selected=(bar.brand==brand._id.toString()? true:false)) #{brand.name}
+                        option(value=brand._id
+                        selected=(bar.brand==brand._id.toString() || bar.brand._id==brand._id.toString()? true:false)) #{brand.name}
                     else
                         option(value=brand._id) #{brand.name}
             label(for='price') Price:
@@ -55,15 +56,6 @@ block content
                             input#lb(type='radio' name='unit' value='lb' checked=true)
                         label.checkbox-inline(for='kg') kg
                             input#kg(type='radio' name='unit' value='kg')
-            //- if bar
-                //- for brand in brands
-            //- p=brands[0]._id
-            //- label(for='unit') Weight unit:
-            //- select#unit.form-control(type='select' name='unit')
-            //-     option(value='lb') lb
-            //-     option(value='kg') kg
-            
-
 
         button.btn.btn-primary(type='submit') Submit
     

@@ -111,10 +111,61 @@ exports.bar_delete_post = function(req, res, next){
     });
 }
 
-exports.bar_update_get = function(req, res){
-    res.send('NOT IMPLEMENTED: Bar update GET');
+exports.bar_update_get = function(req, res, next){
+    async.parallel({
+        bar: function(callback){
+            Bar.findById(req.params.id).populate('brand').exec(callback);
+        },
+        brands: function(callback){
+            Brand.find({}).exec(callback);
+        }
+    },
+    function(err, results){
+        if(err) return next(err);
+        if(results.bar===null) res.redirect('/catalog/bars');
+        console.log(results.brands);
+        res.render('bar_form', {title: 'Update Bar', bar: results.bar, brands:results.brands});
+    })
 }
 
-exports.bar_update_post = function(req, res){
-    res.send('NOT IMPLEMENTED: Bar update POST');
-}
+exports.bar_update_post = [
+    function(req, res, next) {
+        if(req.body.brand=='') req.body.brand=null;
+        req.body.olympic? req.body.olympic=true: req.body.olympic=false;
+        next();
+    },
+    body('type', 'Bar type required').trim().isLength({min:1}).escape(),
+    body('olympic').trim().escape(),
+    body('brand').optional({checkFalsy:true}).escape(),
+    body('price', 'Bar price required').trim().isFloat({min:0}).escape(),
+    body('stock', 'Stock required').trim().isFloat({min:0}).escape(),
+    body('weight', 'Bar weight required').trim().isFloat({min:0}).escape(),
+    body('unit', 'Weight units required').trim().escape(),
+
+    (req,res,next) => {
+        const errors = validationResult(req);
+        
+        var bar = new Bar({
+            type:req.body.type,
+            olympic:req.body.olympic,
+            brand:req.body.brand,
+            price:req.body.price,
+            stock:req.body.stock,
+            weight:req.body.weight,
+            unit:req.body.unit,
+            _id: req.params.id,
+        });
+
+        if(!errors.isEmpty()) {
+            Brand.find({}).exec(function(err, brands){
+                if(err) return next(err);
+                res.render('bar_form', {title:'Update Bar', errors:errors.array(), bar:bar, brands: brands})
+            })
+        }else{
+            Bar.findByIdAndUpdate(req.params.id, bar, {}, function(err, bar){
+                if(err)return next(err);
+                res.redirect(bar.url);
+            })
+        }
+    }
+]
