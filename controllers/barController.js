@@ -123,7 +123,6 @@ exports.bar_update_get = function(req, res, next){
     function(err, results){
         if(err) return next(err);
         if(results.bar===null) res.redirect('/catalog/bars');
-        console.log(results.brands);
         res.render('bar_form', {title: 'Update Bar', bar: results.bar, brands:results.brands});
     })
 }

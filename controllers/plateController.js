@@ -1,6 +1,8 @@
 var Plate = require('../models/plate');
 var Brand = require('../models/brand');
 const {body, validationResult } = require('express-validator');
+const async = require('async');
+const e = require('express');
 
 exports.plate_list = function(req, res){
     Plate.find({}, 'weight brand price units')
@@ -73,9 +75,7 @@ exports.plate_create_post = [
                 res.redirect(plate.url);
             });
         }
-    }
-
-    
+    }    
 ]
 
 exports.plate_delete_get = function(req, res, next){
@@ -93,10 +93,64 @@ exports.plate_delete_post = function(req, res, next){
     })
 }
 
-exports.plate_update_get = function(req, res){
-    res.send('NOT IMPLEMENTED: plate update GET');
+exports.plate_update_get = function(req, res, next){
+    async.parallel({
+        plate: function(callback){
+            Plate.findById(req.params.id).exec(callback);
+            // Plate.find().populate('brand').exec(callback);
+        },
+        brands: function(callback){
+            Brand.find().exec(callback);
+        }
+    },
+    function(err, results){
+        if(err) return next(err);
+        if(results.plate===null) res.redirect('/catalog/plates');
+        res.render('plate_form',{title:'Update Plate', plate:results.plate, brands: results.brands});
+    })
 }
 
-exports.plate_update_post = function(req, res){
-    res.send('NOT IMPLEMENTED: plate update POST');
-}
+exports.plate_update_post = [
+    (req,res,next)=>{
+        if(req.body.brand=='') req.body.brand=null;
+        next()
+    },
+
+    body('weight', 'Plate weight required').trim().isFloat({min:0}).escape(),
+    body('units', 'Weight unit required').trim().escape(),
+    body('brand').optional({checkFalsy:true}).escape(),
+    body('price', 'Plate price required').trim().isFloat({min:0}).escape(),
+    body('stock', 'Plate stock required').trim().isFloat({min:0}).escape(),
+    body('olympic').trim().escape(),
+    body('bumper').trim().toBoolean().escape(),
+    body('rubber_coated').toBoolean().trim().escape(),
+    body('handles').toBoolean().trim().escape(),
+    
+    (req,res,next)=>{
+        const errors = validationResult(req);
+
+        var plate = new Plate({
+            weight:req.body.weight,
+            units:req.body.units,
+            brand:req.body.brand,
+            price:req.body.price,
+            stock:req.body.stock,
+            olympic:req.body.olympic,
+            bumper:req.body.bumper,
+            rubber_coated:req.body.rubber_coated,
+            handles:req.body.handles,
+            _id: req.params.id,
+        });
+        
+        if(!errors.isEmpty()){
+            Brand.find().exec(function(err, brands){
+                res.render('plate_form', {title:'Update Plate', errors:errors.array(), plate:plate, brands:brands});
+            })
+        }else{
+            Plate.findByIdAndUpdate(req.params.id, plate, {}, function(err, plate){
+                if(err) return next(err);
+                res.redirect(plate.url);
+            })
+        }
+    }
+]
