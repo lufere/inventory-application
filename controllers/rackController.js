@@ -1,6 +1,7 @@
 var Rack = require('../models/rack');
 var Brand = require('../models/brand');
 const {body, validationResult } = require('express-validator');
+const async = require('async');
 
 exports.rack_list = function(req, res){
     Rack.find({}, 'type brand price')
@@ -89,9 +90,61 @@ exports.rack_delete_post = function(req, res, next){
 }
 
 exports.rack_update_get = function(req, res){
-    res.send('NOT IMPLEMENTED: rack update GET');
+    async.parallel({
+        rack: function(callback){
+            Rack.findById(req.params.id).exec(callback);
+        },
+        brands: function(callback){
+            Brand.find().exec(callback);
+        }
+    },
+    function(err, results){
+        if(err) return next(err);
+        if(results.rack===null) res.redirect('/catalog/racks');
+        res.render('rack_form', {title:'Update Rack', rack: results.rack, brands:results.brands});
+    })
 }
 
-exports.rack_update_post = function(req, res){
-    res.send('NOT IMPLEMENTED: rack update POST');
-}
+exports.rack_update_post = [
+    function(req, res, next) {
+        if(req.body.brand=='') req.body.brand=null;
+        next();
+    },
+
+    body('type', 'Rack type required').trim().isLength({min:1}).escape(),
+    body('brand').optional({checkFalsy:true}).escape(),
+    body('price', 'Rack price required').trim().isFloat({min:0}).escape(),
+    body('stock', 'Stock required').trim().isFloat({min:0}).escape(),
+    body('gauge', 'Rack gauge required').trim().isFloat({min:0}).escape(),
+    body('profile', 'Rack profile required').trim().isLength({min:1}).escape(),
+    body('capacity').optional({checkFalsy:true}).trim().isFloat({min:0}).escape(),
+    body('unit', 'Weight units required').trim().escape(),
+    body('safeties', 'Safeties type required').trim().isLength({min:1}).escape(),
+
+    (req,res,next)=>{
+        const errors = validationResult(req);
+        var rack = new Rack({
+            type:req.body.type,
+            brand:req.body.brand,
+            price:req.body.price,
+            stock:req.body.stock,
+            gauge:req.body.gauge,
+            profile:req.body.profile,
+            capacity:req.body.capacity,
+            unit:req.body.unit,
+            safeties:req.body.safeties,
+            _id: req.params.id,
+        });
+
+        if(!errors.isEmpty()){
+            Brand.find().exec(function(err, brands){
+                res.render('rack_form',{title:'Update Rack', errors:errors.array(), rack:rack, brands:brands});
+            });
+        }else{
+            Rack.findByIdAndUpdate(req.params.id, rack, {}, function(err, rack){
+                if(err) return next(err);
+                res.redirect(rack.url);
+            });
+        }
+    }
+]
